@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">InstaPets</string>
+
+    <!-- OnBoarding Strings -->
+    <string name="onboarding_first_title">Bienvenido a InstaPets</string>
+    <string name="onboarding_first_subtitle">¡Encuentra y comparte fotos de mascotas de todo el mundo al instante!</string>
+
+    <string name="onboarding_second_title">Necesitamos acceso</string>
+    <string name="onboarding_second_subtitle">Para poder subir fotos de tus mascotas, necesitamos acceso a tu cámara y galería de tu dispositivo.</string>
+
+    <string name="onboarding_third_title">¡Empieza ahora!</string>
+    <string name="onboarding_get_started">Empezar</string>
+    <string name="onboarding_skip">Omitir</string>
+
+    <!-- Activity Main Strings -->
+    <string name="main_fab_description">Subir al inicio</string>
+    <string name="home_title">Inicio</string>
+    <string name="search_title">Buscar</string>
+    <string name="library_title">Biblioteca</string>
+    <string name="change_display_title">Cambiar display</string>
+    <string name="search_breed_hint">Busca una raza</string>
+
+</resources>

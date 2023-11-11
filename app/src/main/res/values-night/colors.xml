@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark-mode Colors -->
+    <color name="background_color">@color/black</color>
+    <color name="separator_color">@color/dark_gray</color>
+    <color name="title_color">@color/white</color>
+
+</resources>
