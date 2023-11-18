@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instapets.databinding.OnboardingItemBinding
 import com.example.instapets.ui.onboarding.model.OnBoardingModel
 
-class OnBoardingViewHolder(view:View):RecyclerView.ViewHolder(view) {
+class OnBoardingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val binding = OnboardingItemBinding.bind(view)
 
-    fun render(model: OnBoardingModel, onGetStartedClicked:() -> Unit) {
+    fun render(model: OnBoardingModel, onGetStartedClicked: () -> Unit) {
         binding.tvOnBoardingTitle.setStringResource(model.title)
         binding.ivOnBoardingImage.setImageResource(model.image)
 
@@ -24,7 +24,7 @@ class OnBoardingViewHolder(view:View):RecyclerView.ViewHolder(view) {
                 visibility = VISIBLE
             }
 
-        } ?: run{
+        } ?: run {
             binding.tvOnBoardingSubtitle.visibility = INVISIBLE
             binding.btnOnBoardingGetStarted.apply {
                 visibility = VISIBLE
@@ -33,7 +33,7 @@ class OnBoardingViewHolder(view:View):RecyclerView.ViewHolder(view) {
         }
     }
 
-    private fun AppCompatTextView.setStringResource(@StringRes id:Int){
+    private fun AppCompatTextView.setStringResource(@StringRes id: Int) {
         text = itemView.resources.getString(id)
     }
 }

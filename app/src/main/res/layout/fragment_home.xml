@@ -1,15 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeSwipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@color/background_color"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home_title" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:visibility="invisible" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/homeShimmerLoading"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="290dp"
+                    android:background="@android:color/darker_gray" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="32dp">
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginHorizontal="32dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/darker_gray" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="290dp"
+                    android:background="@android:color/darker_gray" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginHorizontal="32dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/darker_gray" />
+
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/darker_gray" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/homeError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_wifi_off"
+                app:tint="@color/red" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/no_hay_conexi_n_vuelva_a_intentarlo"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </FrameLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -7,10 +7,7 @@ import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.instapets.R
 import com.example.instapets.R.id.libraryFragment
 import com.example.instapets.R.id.searchFragment
@@ -19,19 +16,17 @@ import com.example.instapets.R.string.app_name
 import com.example.instapets.R.string.library_title
 import com.example.instapets.R.string.search_title
 import com.example.instapets.databinding.ActivityMainBinding
+import com.example.instapets.ui.main.adapter.MainViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
+    private lateinit var viewPagerAdapter: MainViewPagerAdapter
 
-    private var toolbarSearch: MenuItem? = null
-    private var toolbarChangeDisplay: MenuItem? = null
+    private var toolbarSearchButton: MenuItem? = null
     private var toolbarSearchView: SearchView? = null
+    private var toolbarChangeDisplayButton: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,42 +45,46 @@ class MainActivity : AppCompatActivity() {
     private fun initUI() {
         setSupportActionBar(binding.mainToolbar)
 
-        val nav = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = nav.navController
-        binding.mainBottomNavigation.setupWithNavController(navController)
+        viewPagerAdapter = MainViewPagerAdapter(this)
+        binding.mainViewPager.adapter = viewPagerAdapter
     }
 
     private fun initListeners() {
-        binding.mainSwipe.setOnRefreshListener {
-            lifecycleScope.launch {
-                delay(1200)
-                binding.mainSwipe.isRefreshing = false
+        binding.mainViewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                val destinationID = viewPagerAdapter.getFragmentId(position)
+                binding.mainBottomNavigation.selectedItemId = destinationID
+                changeToolbarItems(destinationID)
+                super.onPageSelected(position)
             }
+        })
+
+        binding.mainBottomNavigation.setOnItemSelectedListener { destination ->
+            binding.mainViewPager.currentItem =
+                viewPagerAdapter.getFragmentPosition(destination.itemId)
+            changeToolbarItems(destination.itemId)
+            true
         }
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            changeToolbarItems(destination.id)
-        }
     }
 
     private fun initToolbarUI(menu: Menu) {
-        toolbarSearch = menu.findItem(R.id.toolbarSearch)
+        toolbarSearchButton = menu.findItem(R.id.toolbarSearchButton)
 
-        toolbarSearchView = toolbarSearch?.actionView as SearchView
+        toolbarSearchView = toolbarSearchButton?.actionView as SearchView
         toolbarSearchView?.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
                 return false
             }
-            override fun onQueryTextChange(newText: String?): Boolean {
 
+            override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
 
-        toolbarChangeDisplay = menu.findItem(R.id.toolbarChangeDisplay)
-        toolbarChangeDisplay?.setOnMenuItemClickListener {
-            it.apply {
+        toolbarChangeDisplayButton = menu.findItem(R.id.toolbarChangeDisplayButton)
+        toolbarChangeDisplayButton?.setOnMenuItemClickListener { itemButton ->
+            itemButton.apply {
                 isChecked = !isChecked
                 setIcon(
                     if (isChecked) R.drawable.ic_display_small
@@ -96,7 +95,8 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        navController.currentDestination?.id?.let { changeToolbarItems(it) }
+        val currentId = viewPagerAdapter.getFragmentId(binding.mainViewPager.currentItem)
+        changeToolbarItems(currentId)
     }
 
     private fun changeToolbarItems(@IdRes fragmentID: Int) {
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = when (fragmentID) {
             searchFragment -> {
                 search = true
-                 getString(search_title)
+                getString(search_title)
             }
 
             libraryFragment -> {
@@ -121,15 +121,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Collapse
-        toolbarSearch?.collapseActionView()
+        toolbarSearchButton?.collapseActionView()
         binding.mainAppBarLayout.setExpanded(true, true)
 
         //Visibility
-        toolbarSearch?.isVisible = search
-        toolbarChangeDisplay?.isVisible = changeDisplay
+        toolbarSearchButton?.isVisible = search
+        toolbarChangeDisplayButton?.isVisible = changeDisplay
     }
 
-    private fun changeDisplay(largeDisplay:Boolean) {
+    private fun changeDisplay(largeDisplay: Boolean) {
 
     }
 

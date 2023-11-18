@@ -31,22 +31,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/mainSwipe"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/mainViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="128dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_nav" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <View
         android:layout_width="match_parent"
@@ -60,21 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/mainFAB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="32dp"
-            android:backgroundTint="@color/orange"
-            android:contentDescription="@string/main_fab_description"
-            android:src="@drawable/ic_arrow_up"
-            app:elevation="2dp"
-            app:maxImageSize="32dp"
-            app:shapeAppearance="@style/CircularShape"
-            app:tint="@color/white"
-            tools:ignore="ImageContrastCheck" />
 
         <View
             android:layout_width="match_parent"

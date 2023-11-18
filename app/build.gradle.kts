@@ -66,6 +66,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
 
+    // StateFlow (coroutines)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
     // Navigation Component
     val navVersion = "2.7.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
@@ -73,8 +76,15 @@ dependencies {
 
     // Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
     // Swipe Refresh Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Picasso
+    implementation("com.squareup.picasso:picasso:2.8")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

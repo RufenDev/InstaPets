@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">InstaPets</string>
 
-    <!-- OnBoarding Strings -->
+    <!-- OnBoarding -->
     <string name="onboarding_first_title">Welcome to InstaPets</string>
     <string name="onboarding_first_subtitle">Find photos of pets from around the world instantly!</string>
 
@@ -13,12 +13,21 @@
     <string name="onboarding_get_started">Get Started</string>
     <string name="onboarding_skip">Skip</string>
 
-    <!-- Activity Main Strings -->
+    <!-- Activity Main -->
     <string name="main_fab_description">Go up to the top</string>
     <string name="home_title">Home</string>
     <string name="search_title">Search</string>
     <string name="library_title">Library</string>
     <string name="change_display_title">Change display</string>
     <string name="search_breed_hint">search for a breed</string>
+    <string name="more_options_description">More options</string>
+    <string name="save_description">Save the pet image</string>
+    <string name="like_description">Like the image of the pet</string>
+    <string name="pet_image_description">Pet image</string>
+    <string name="image_not_found">Image not found</string>
+    <string name="no_hay_conexi_n_vuelva_a_intentarlo">No hay conexión, vuelva a intentarlo.</string>
+
+    <!-- Home Fragment -->
+
 
 </resources>

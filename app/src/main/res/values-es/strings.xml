@@ -20,4 +20,12 @@
     <string name="change_display_title">Cambiar display</string>
     <string name="search_breed_hint">Busca una raza</string>
 
+    <!-- Home Fragment Strings -->
+    <string name="more_options_description">Más opciones</string>
+    <string name="save_description">Guardar la imagen de la mascota</string>
+    <string name="like_description">Me gusta a la imagen de la mascota</string>
+    <string name="pet_image_description">Imagen de mascota</string>
+    <string name="image_not_found">Imagen no encontrada</string>
+    <string name="no_hay_conexi_n_vuelva_a_intentarlo">No hay conexión, vuelva a intentarlo.</string>
+
 </resources>
