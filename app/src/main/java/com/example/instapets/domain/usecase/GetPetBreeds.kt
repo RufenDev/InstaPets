@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class GetPetBreeds @Inject constructor(private val repository: Repository) {
     suspend operator fun invoke(type : PetTypes) = withContext(IO){
-        repository.getPetBreedsList(type)
+        repository.getBreedsList(type)
     }
 }

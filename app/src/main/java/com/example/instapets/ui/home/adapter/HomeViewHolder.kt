@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.instapets.R.color.red
 import com.example.instapets.R.color.separator_color
 import com.example.instapets.R.color.title_color
@@ -14,11 +17,10 @@ import com.example.instapets.R.drawable.ic_like_empty
 import com.example.instapets.R.drawable.ic_like_fill
 import com.example.instapets.R.drawable.ic_save_empty
 import com.example.instapets.R.drawable.ic_save_fill
-import com.example.instapets.R.drawable.not_image
+import com.example.instapets.R.drawable.no_image
 import com.example.instapets.databinding.HomeItemBinding
 import com.example.instapets.domain.model.home.HomePetModel
 import com.example.instapets.ui.home.adapter.HomeAction.*
-import com.squareup.picasso.Picasso
 
 class HomeViewHolder(view: View) : ViewHolder(view) {
 
@@ -26,10 +28,10 @@ class HomeViewHolder(view: View) : ViewHolder(view) {
 
     @SuppressLint("ClickableViewAccessibility")
     fun bind(pet: HomePetModel, onHomeAction: (HomeAction) -> Unit) {
-        binding.tvHomePetBreed.text = pet.breeds.firstOrNull()?.name ?: ""
-
         isPetLiked = pet.isPetLiked
         isPetSaved = pet.isPetSaved
+
+        binding.tvHomePetBreed.text = pet.breeds.firstOrNull()?.name ?: ""
 
         binding.btnHomeLike.setOnClickListener {
             isPetLiked = !isPetLiked
@@ -45,43 +47,53 @@ class HomeViewHolder(view: View) : ViewHolder(view) {
             onHomeAction(OnMoreOptions(pet, binding.btnHomeMoreOptions))
         }
 
+        val glideOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .override(binding.ivHomeImage.width, 0)
+            .centerCrop()
+
         val glide = Glide.with(itemView.context)
         if (pet.image.endsWith(".gif")) {
             glide.asGif()
                 .load(pet.image)
                 .placeholder(separator_color)
-                .error(not_image)
-                .centerCrop()
+                .error(no_image)
+                .apply(glideOptions)
                 .into(binding.ivHomeImage)
 
         } else {
-            Picasso.get()
+            glide.asBitmap()
                 .load(pet.image)
                 .placeholder(separator_color)
-                .error(not_image)
+                .error(no_image)
+                .apply(glideOptions)
                 .into(binding.ivHomeImage)
-
         }
 
-        val likeGesture = GestureDetectorCompat(
-            itemView.context,
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    onHomeAction(SeePetDescription(pet))
-                    return false
-                }
-
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    petLikeAnimation()
-                    onHomeAction(OnPetLiked(pet, true))
-                    return false
-                }
-            })
-
-        binding.ivHomeImage.setOnTouchListener { _, event ->
-            likeGesture.onTouchEvent(event)
+        val likeGesture = GestureDetectorCompat(itemView.context, imageGestures(pet, onHomeAction))
+        binding.ivHomeImage.setOnTouchListener { _, evt ->
+            likeGesture.onTouchEvent(evt)
             false
         }
+    }
+
+    private fun imageGestures(pet: HomePetModel, onHomeAction: (HomeAction) -> Unit) =
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                Toast.makeText(itemView.context, "Single", Toast.LENGTH_SHORT).show()
+                onHomeAction(SeePetDescription(pet.id))
+                return false
+            }
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                Toast.makeText(itemView.context, "Double", Toast.LENGTH_SHORT).show()
+                petLikeAnimation()
+                onHomeAction(OnPetLiked(pet, true))
+                return false
+            }
+        }
+
+    private fun petLikeAnimation() {
+        isPetLiked = true
     }
 
     private var isPetLiked = false
@@ -98,8 +110,4 @@ class HomeViewHolder(view: View) : ViewHolder(view) {
             binding.btnHomeSave.setImageResource(if (value) ic_save_fill else ic_save_empty)
             field = value
         }
-
-    private fun petLikeAnimation() {
-        isPetLiked = true
-    }
 }

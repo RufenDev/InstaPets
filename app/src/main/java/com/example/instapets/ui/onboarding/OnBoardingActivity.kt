@@ -1,17 +1,17 @@
 package com.example.instapets.ui.onboarding
 
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.instapets.core.PetTypes
 import com.example.instapets.databinding.ActivityOnBoardingBinding
 import com.example.instapets.ui.core.Animations.fadeIn
 import com.example.instapets.ui.core.Animations.fadeOut
+import com.example.instapets.ui.core.preferences.ConfigurationPreferences
 import com.example.instapets.ui.onboarding.adapter.OnBoardingAdapter
 import com.example.instapets.ui.onboarding.provider.OnBoardingProvider
 import com.example.instapets.ui.main.MainActivity
@@ -23,10 +23,9 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOnBoardingBinding
     private lateinit var onBoardingAdapter: OnBoardingAdapter
-    private lateinit var onBoardingPreference: SharedPreferences
 
-    @Inject
-    lateinit var onBoardingProvider: OnBoardingProvider
+    @Inject lateinit var onBoardingProvider: OnBoardingProvider
+    @Inject lateinit var configurationPreferences: ConfigurationPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
@@ -35,10 +34,7 @@ class OnBoardingActivity : AppCompatActivity() {
         binding = ActivityOnBoardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        onBoardingPreference = PreferenceManager.getDefaultSharedPreferences(this)
-        val skip = onBoardingPreference.getBoolean(ONBOARDING_SKIP_KEY, false)
-
-        if (skip) {
+        if (configurationPreferences.getSkipOnBoarding()) {
             navigateToMain()
 
         } else {
@@ -51,7 +47,11 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        onBoardingAdapter = OnBoardingAdapter(onBoardingProvider()) { onGetStartedClicked() }
+        onBoardingAdapter = OnBoardingAdapter(
+            onBoardingProvider(),
+            { onGetStartedClicked() },
+            { onPetPreferenceSelected(it) }
+        )
 
         binding.vpOnBoarding.apply {
             adapter = onBoardingAdapter
@@ -105,11 +105,11 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     private fun onGetStartedClicked() {
-        onBoardingPreference.edit().putBoolean(ONBOARDING_SKIP_KEY, true).apply()
+        configurationPreferences.saveSkipOnboardingOption()
         navigateToMain()
     }
 
-    private companion object {
-        const val ONBOARDING_SKIP_KEY = "onboarding_skip_key"
+    private fun onPetPreferenceSelected(pet: PetTypes) {
+        configurationPreferences.savePet(pet)
     }
 }

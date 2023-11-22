@@ -43,10 +43,12 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvOnBoardingTitle"
-        tools:text="@string/onboarding_first_subtitle" />
+        tools:text="@string/onboarding_third_subtitle"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/btnOnBoardingGetStarted"
@@ -64,5 +66,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvOnBoardingTitle"
         tools:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/rgPetPreferences"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checkedButton="@id/rbtnCat"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvOnBoardingSubtitle"
+        tools:visibility="visible">
+
+        <RadioButton
+            android:id="@+id/rbtnCat"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/onboarding_radio_button"
+            android:button="@android:color/transparent"
+            android:drawableTop="@drawable/cat"
+            android:drawableTint="@color/onboarding_button_state"
+            android:paddingVertical="18dp"
+            android:text="@string/cats_title"
+            android:textAlignment="center"
+            android:textColor="@color/onboarding_button_state"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/rbtnBoth"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginHorizontal="32dp"
+            android:background="@drawable/onboarding_radio_button"
+            android:button="@android:color/transparent"
+            android:drawableTop="@drawable/both_pets"
+            android:drawableTint="@color/onboarding_button_state"
+            android:paddingVertical="18dp"
+            android:text="@string/both_pets_title"
+            android:textAlignment="center"
+            android:textColor="@color/onboarding_button_state"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/rbtnDog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/onboarding_radio_button"
+            android:button="@android:color/transparent"
+            android:drawableTop="@drawable/dog"
+            android:drawableTint="@color/onboarding_button_state"
+            android:paddingVertical="18dp"
+            android:text="@string/dogs_title"
+            android:textAlignment="center"
+            android:textColor="@color/onboarding_button_state"
+            android:textStyle="bold" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,9 +18,14 @@ interface APIService {
     suspend fun getPetDescription(@Path("pet_id") id: String): Response<PetItem>
 
     @GET("breeds")
-    suspend fun getPetBreeds() : Response<BreedsResponse>
+    suspend fun getPetBreeds(): Response<BreedsResponse>
 
     @GET("categories")
-    suspend fun getPetCategories() : Response<CategoriesResponse>
+    suspend fun getPetCategories(): Response<CategoriesResponse>
 
+    @GET("images/search")
+    suspend fun getPetByFilter(
+        @Query("breed_ids") breedId: String,
+        @Query("category_ids") categoryId: String
+    ) : Response<PetResponse>
 }

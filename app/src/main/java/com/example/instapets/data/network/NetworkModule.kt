@@ -1,5 +1,6 @@
 package com.example.instapets.data.network
 
+import com.example.instapets.BuildConfig
 import com.example.instapets.data.RepositoryImplementation
 import com.example.instapets.domain.Repository
 import dagger.Module
@@ -33,7 +34,7 @@ object NetworkModule {
     fun provideCatRetrofit(client: OkHttpClient):Retrofit{
         return Retrofit
             .Builder()
-            .baseUrl("https://api.thecatapi.com/v1/")
+            .baseUrl(BuildConfig.CAT_API_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -45,7 +46,7 @@ object NetworkModule {
     fun provideDogRetrofit(client: OkHttpClient):Retrofit{
         return Retrofit
             .Builder()
-            .baseUrl("https://api.thedogapi.com/v1/")
+            .baseUrl(BuildConfig.DOG_API_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

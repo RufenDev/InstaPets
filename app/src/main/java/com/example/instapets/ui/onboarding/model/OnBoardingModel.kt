@@ -14,4 +14,6 @@ data class OnBoardingModel(
 
     @DrawableRes
     val image:StringResID,
+
+    val showPreferences:Boolean = false
 )

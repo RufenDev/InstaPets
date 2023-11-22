@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_library"
         android:title="@string/library_title" />
 
+    <item
+        android:id="@+id/optionFragment"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/options_title" />
+
 </menu>

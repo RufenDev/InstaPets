@@ -27,8 +27,9 @@ object Extensions {
 
         }.conflate()
 
-    fun View.visibility(show:Boolean){
-        visibility = if(show) View.VISIBLE else View.INVISIBLE
+    fun View.visibility(show: Boolean) {
+        visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
+
 }
 

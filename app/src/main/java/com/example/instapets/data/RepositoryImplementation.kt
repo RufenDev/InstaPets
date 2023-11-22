@@ -8,18 +8,20 @@ import com.example.instapets.data.network.APIClient
 import com.example.instapets.data.network.response.PetItem
 import com.example.instapets.domain.Repository
 import com.example.instapets.domain.model.CategoryModel
-import com.example.instapets.domain.model.CategoryModel.Companion.toDomain
-import com.example.instapets.domain.model.description.PetDescriptionModel
-import com.example.instapets.domain.model.description.PetDescriptionModel.Companion.toDomain
-import com.example.instapets.domain.model.home.HomeBreedModel
-import com.example.instapets.domain.model.home.HomeBreedModel.Companion.toDomain
+import com.example.instapets.domain.model.CategoryModel.Companion.toCategoryModel
+import com.example.instapets.domain.model.SimpleBreedModel
+import com.example.instapets.domain.model.SimpleBreedModel.Companion.toBreedModel
+import com.example.instapets.domain.model.description.DescriptionPetModel
+import com.example.instapets.domain.model.description.DescriptionPetModel.Companion.toDescriptionModel
 import com.example.instapets.domain.model.home.HomePetModel
-import com.example.instapets.domain.model.home.HomePetModel.Companion.toDomain
+import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
+import com.example.instapets.domain.model.search.SearchPetModel
+import com.example.instapets.domain.model.search.SearchPetModel.Companion.toSearchModel
 import javax.inject.Inject
 
 class RepositoryImplementation @Inject constructor(private val apiClient: APIClient) : Repository {
 
-    override suspend fun getPetImages(type: PetTypes): List<HomePetModel> {
+    override suspend fun getPetsImages(type: PetTypes): List<HomePetModel> {
         val response: PetItem.PetResponse? = when (type) {
             CAT -> apiClient.cat.getCatImagesFromAPI()
             DOG -> apiClient.dog.getDogImagesFromAPI()
@@ -27,7 +29,7 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
 
         response?.let {
-            return it.toDomain()
+            return it.toHomeModel()
 
         } ?: run {
             //Return from DATABASE
@@ -35,7 +37,7 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
     }
 
-    override suspend fun getPetDescription(id: String, type: PetTypes): PetDescriptionModel {
+    override suspend fun getPetDescription(id: String, type: PetTypes): DescriptionPetModel {
         val response = when (type) {
             CAT -> apiClient.cat.getCatDescriptionFromAPI(id)
             DOG -> apiClient.dog.getDogDescriptionFromAPI(id)
@@ -43,15 +45,15 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
 
         response?.let {
-            return it.toDomain()
+            return it.toDescriptionModel()
 
         } ?: run {
             //Return from database
-            return PetDescriptionModel("", "", emptyList(), emptyList())
+            return DescriptionPetModel("", "", emptyList(), emptyList())
         }
     }
 
-    override suspend fun getPetBreedsList(type: PetTypes): List<HomeBreedModel> {
+    override suspend fun getBreedsList(type: PetTypes): List<SimpleBreedModel> {
         val response = when (type) {
             CAT -> apiClient.cat.getCatBreedsFromAPI()
             DOG -> apiClient.dog.getDogBreedsFromAPI()
@@ -59,19 +61,40 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
 
         response?.let {
-            return it.toDomain()
+            return it.toBreedModel()
+
         } ?: run {
             //Return from Database
             return emptyList()
         }
     }
 
-    override suspend fun getCatCategoriesList(): List<CategoryModel> {
+    override suspend fun getCategoriesList(): List<CategoryModel> {
         apiClient.cat.getCatCategoriesFromAPI()?.let {
-            return it.toDomain()
+            return it.toCategoryModel()
 
         } ?: run {
             //Return from Database
+            return emptyList()
+        }
+    }
+
+    override suspend fun getPetsByFilter(
+        breedId: String,
+        categoryId: String,
+        type: PetTypes,
+    ): List<SearchPetModel> {
+        val response: PetItem.PetResponse?  = when(type){
+            CAT -> {apiClient.cat.getCatsByFilters(breedId, categoryId)}
+            DOG -> {apiClient.dog.getDogsByFilters(breedId, categoryId)}
+            PETS -> {apiClient.pets.getPetsByFilters(breedId, categoryId)}
+        }
+
+        response?.let {
+            return it.toSearchModel()
+
+        } ?: run {
+            //return from database
             return emptyList()
         }
     }

@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.instapets.R.layout.home_item
 import com.example.instapets.R.layout.loading_bar_item
 import com.example.instapets.domain.model.home.HomePetModel
-import com.example.instapets.ui.core.LoadingBarViewHolder
-import com.example.instapets.ui.home.viewmodel.HomeViewModel.Companion.LOADING_TYPE
-import com.example.instapets.ui.home.viewmodel.HomeViewModel.Companion.loadingBar
+import com.example.instapets.ui.core.views.LoadingBarViewHolder
+import com.example.instapets.ui.core.views.LoadingBarViewHolder.Companion.LOADING_BAR_ID
+import com.example.instapets.ui.core.views.LoadingBarViewHolder.Companion.LOADING_BAR_TYPE
 
 class HomeAdapter(
     private val onHomeAction: (HomeAction) -> Unit
@@ -18,7 +18,7 @@ class HomeAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        return if (viewType == LOADING_TYPE) {
+        return if (viewType == LOADING_BAR_TYPE) {
             LoadingBarViewHolder(inflater.inflate(loading_bar_item, parent, false))
         } else {
             HomeViewHolder(inflater.inflate(home_item, parent, false))
@@ -32,7 +32,7 @@ class HomeAdapter(
     }
 
     override fun getItemViewType(position: Int) =
-        if (currentList[position] == loadingBar) LOADING_TYPE
+        if (currentList[position].id == LOADING_BAR_ID) LOADING_BAR_TYPE
         else super.getItemViewType(position)
 
 }

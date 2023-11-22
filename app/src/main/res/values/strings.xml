@@ -3,29 +3,45 @@
     <string name="app_name">InstaPets</string>
 
     <!-- OnBoarding -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_get_started">Get Started</string>
+
     <string name="onboarding_first_title">Welcome to InstaPets</string>
     <string name="onboarding_first_subtitle">Find photos of pets from around the world instantly!</string>
 
     <string name="onboarding_second_title">We need access</string>
     <string name="onboarding_second_subtitle">In order to upload photos of your pets, we need access to your camera and gallery on your device.</string>
 
-    <string name="onboarding_third_title">Get started now!</string>
-    <string name="onboarding_get_started">Get Started</string>
-    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_third_title">Choose the pets</string>
+    <string name="onboarding_third_subtitle">Choose the pets you want to see.</string>
+
+    <string name="onboarding_fourth_title">Get started now!</string>
 
     <!-- Activity Main -->
-    <string name="main_fab_description">Go up to the top</string>
     <string name="home_title">Home</string>
     <string name="search_title">Search</string>
     <string name="library_title">Library</string>
+    <string name="options_title">Options</string>
+
     <string name="change_display_title">Change display</string>
+    <string name="cats_title">Cats</string>
+    <string name="both_pets_title">Both</string>
+    <string name="dogs_title">Dogs</string>
+
     <string name="search_breed_hint">search for a breed</string>
+    <string name="error_no_connection">No connection available, try again.</string>
+
     <string name="more_options_description">More options</string>
     <string name="save_description">Save the pet image</string>
     <string name="like_description">Like the image of the pet</string>
     <string name="pet_image_description">Pet image</string>
-    <string name="image_not_found">Image not found</string>
-    <string name="no_hay_conexi_n_vuelva_a_intentarlo">No hay conexión, vuelva a intentarlo.</string>
+    <string name="main_fab_description">Go up to the top</string>
+    <string name="see_pet_title">Ver mascota</string>
+    <string name="share_pet_title">Compartir</string>
+    <string name="breeds_list_hint">Breeds</string>
+    <string name="categories_list_hint">Categories</string>
+    <string name="filters_title">Selecciona un filtro</string>
+    <string name="resultado_al_buscar_mascotas">Resultado al buscar mascotas</string>
 
     <!-- Home Fragment -->
 

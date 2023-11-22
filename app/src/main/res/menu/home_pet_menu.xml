@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeMenuSeeDescription"
+        android:title="@string/see_pet_title" />
+
+    <item
+        android:id="@+id/homeMenuShare"
+        android:title="@string/share_pet_title" />
+
+</menu>

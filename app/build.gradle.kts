@@ -27,6 +27,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("String", "CAT_API_URL", "\"https://api.thecatapi.com/v1/\"")
+            buildConfigField("String", "DOG_API_URL", "\"https://api.thedogapi.com/v1/\"")
+        }
+
+        debug{
+            buildConfigField("String", "CAT_API_URL", "\"https://api.thecatapi.com/v1/\"")
+            buildConfigField("String", "DOG_API_URL", "\"https://api.thedogapi.com/v1/\"")
         }
     }
     compileOptions {
@@ -38,6 +46,7 @@ android {
     }
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -83,8 +92,8 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
-    // Picasso
-    implementation("com.squareup.picasso:picasso:2.8")
+    // SpinKit
+    implementation("com.github.ybq:Android-SpinKit:1.4.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -11,5 +11,5 @@ sealed interface HomeAction {
     data class OnMoreOptions(val homePet: HomePetModel, val button: AppCompatImageButton) :
         HomeAction
 
-    data class SeePetDescription(val homePet: HomePetModel) : HomeAction
+    data class SeePetDescription(val petId: String) : HomeAction
 }
