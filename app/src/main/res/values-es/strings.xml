@@ -44,5 +44,9 @@
 
     <!-- Home Fragment Strings -->
 
+    <!-- Filter Activity String -->
+    <string name="filter_title">Filtros</string>
+    <string name="error_no_categories_found">No hay categorías para perros</string>
+
 
 </resources>

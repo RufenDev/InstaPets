@@ -13,10 +13,11 @@
         android:id="@+id/ivHomeImage"
         android:layout_width="match_parent"
         android:layout_height="360dp"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:contentDescription="@string/pet_image_description"
-        tools:src="@drawable/cat_example1" />
+        tools:src="@drawable/example1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

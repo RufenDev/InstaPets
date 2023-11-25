@@ -23,6 +23,7 @@ import com.example.instapets.ui.home.adapter.HomeAction
 import com.example.instapets.ui.home.adapter.HomeAdapter
 import com.example.instapets.ui.core.states.States.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -62,6 +63,8 @@ class HomeFragment : Fragment() {
         binding.swipeHome.setOnRefreshListener {
             lifecycleScope.launch {
                 homeViewModel.refreshingHome()
+                delay(200)
+                binding.swipeHome.isRefreshing = false
             }
         }
 
@@ -71,15 +74,6 @@ class HomeFragment : Fragment() {
     private suspend fun initFlows() {
         repeatOnLifecycle(STARTED) {
             launch { homeViewModel.pets.collect { homeAdapter.submitList(it) } }
-
-            launch {
-                homeViewModel.swipe.collect {
-                    binding.swipeHome.apply {
-                        if(!it) isRefreshing = false
-                        isEnabled = it
-                    }
-                }
-            }
 
             launch {
                 binding.rvHome.lastVisibleItem.collect {

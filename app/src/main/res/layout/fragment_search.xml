@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_search_scene"
     tools:context=".ui.search.SearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/searchFilterLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/background_color"
         android:elevation="2dp"
         android:orientation="vertical"
         android:paddingHorizontal="8dp"
         android:paddingVertical="10dp"
-        android:background="@color/background_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -84,9 +85,9 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:padding="4dp"
+                android:padding="2dp"
                 android:visibility="invisible"
-                tools:visibility="invisible" />
+                tools:visibility="visible" />
 
             <com.github.ybq.android.spinkit.SpinKitView
                 android:id="@+id/skSearchLoading"
@@ -105,7 +106,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:visibility="gone"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="64dp"
@@ -114,12 +115,8 @@
                     app:tint="@color/red" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/error_no_connection"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    style="@style/ErrorDescriptionTitle"
+                    android:text="@string/error_no_connection" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -146,4 +143,4 @@
         tools:ignore="ImageContrastCheck"
         tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

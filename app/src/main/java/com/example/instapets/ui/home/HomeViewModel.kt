@@ -28,9 +28,8 @@ class HomeViewModel @Inject constructor(
     private val _pets = MutableStateFlow<List<HomePetModel>>(emptyList())
     val pets: StateFlow<List<HomePetModel>> = _pets
 
-    private val _swipe = MutableStateFlow(false)
-    val swipe: StateFlow<Boolean> = _swipe
-
+    private var isRefreshing: Boolean = false
+    private var cancel:Boolean = false
     private var petPreference: PetTypes
 
     init {
@@ -47,29 +46,36 @@ class HomeViewModel @Inject constructor(
     }
 
     suspend fun refreshingHome() {
-        _state.value = REFRESH
-        _pets.value = emptyList()
+        if(!isRefreshing){
+            isRefreshing = true
+            cancel = false
 
-        delay(100)
+            _state.value = REFRESH
+            _pets.value = emptyList()
 
-        _swipe.value = false
-        getRandomPets()
+            delay(100)
+
+            getRandomPets()
+        }
     }
 
     suspend fun getRandomPets(lastPosition: Int = 0) {
         val isNotLoadingMorePets = _state.value != LOAD_MORE
         val lastItemIsVisible = lastPosition >= _pets.value.size.minus(2)
 
-        if (lastItemIsVisible && isNotLoadingMorePets) {
+        if (lastItemIsVisible && isNotLoadingMorePets && !cancel) {
             _state.value = LOAD_MORE
 
             val response = petImages(petPreference)
 
             if (response.isNotEmpty()) {
                 val oldList = _pets.value.minus(loadingBar)
-                val newList = oldList.plus(response).plus(loadingBar)
-                if(_state.value == LOAD_MORE){
-                    _pets.value = newList
+                val newList = oldList.plus(response).distinct()
+
+                cancel = oldList == newList
+
+                if(_state.value == LOAD_MORE && !cancel){
+                    _pets.value = newList.plus(loadingBar)
                     _state.value = SUCCESS
                 }
 
@@ -81,7 +87,7 @@ class HomeViewModel @Inject constructor(
             }
 
         }
-        _swipe.value = true
+        isRefreshing = false
     }
 
     fun petLiked(pet: HomePetModel) {

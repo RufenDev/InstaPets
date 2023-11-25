@@ -7,12 +7,11 @@ import com.example.instapets.core.PetTypes.PETS
 import com.example.instapets.data.network.APIClient
 import com.example.instapets.data.network.response.PetItem
 import com.example.instapets.domain.Repository
-import com.example.instapets.domain.model.CategoryModel
-import com.example.instapets.domain.model.CategoryModel.Companion.toCategoryModel
-import com.example.instapets.domain.model.SimpleBreedModel
-import com.example.instapets.domain.model.SimpleBreedModel.Companion.toBreedModel
+import com.example.instapets.domain.BreedOrCategoryFilter
 import com.example.instapets.domain.model.description.DescriptionPetModel
 import com.example.instapets.domain.model.description.DescriptionPetModel.Companion.toDescriptionModel
+import com.example.instapets.domain.model.filter.FilterModel
+import com.example.instapets.domain.model.filter.FilterModel.Companion.toFilterModel
 import com.example.instapets.domain.model.home.HomePetModel
 import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
 import com.example.instapets.domain.model.search.SearchPetModel
@@ -53,7 +52,18 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
     }
 
-    override suspend fun getBreedsList(type: PetTypes): List<SimpleBreedModel> {
+    override suspend fun getPetFilters(filter: BreedOrCategoryFilter, type: PetTypes) =
+        if (filter) {
+            getBreedsList(type)
+
+        } else if (type != DOG) {
+            getCategoriesList()
+
+        } else {
+            emptyList()
+        }
+
+    private suspend fun getBreedsList(type: PetTypes): List<FilterModel> {
         val response = when (type) {
             CAT -> apiClient.cat.getCatBreedsFromAPI()
             DOG -> apiClient.dog.getDogBreedsFromAPI()
@@ -61,7 +71,7 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
 
         response?.let {
-            return it.toBreedModel()
+            return it.toFilterModel()
 
         } ?: run {
             //Return from Database
@@ -69,9 +79,9 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
     }
 
-    override suspend fun getCategoriesList(): List<CategoryModel> {
+    private suspend fun getCategoriesList(): List<FilterModel> {
         apiClient.cat.getCatCategoriesFromAPI()?.let {
-            return it.toCategoryModel()
+            return it.toFilterModel()
 
         } ?: run {
             //Return from Database
@@ -80,14 +90,12 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
     }
 
     override suspend fun getPetsByFilter(
-        breedId: String,
-        categoryId: String,
-        type: PetTypes,
+        filter: FilterModel, filterType: BreedOrCategoryFilter, petPreference:PetTypes
     ): List<SearchPetModel> {
-        val response: PetItem.PetResponse?  = when(type){
-            CAT -> {apiClient.cat.getCatsByFilters(breedId, categoryId)}
-            DOG -> {apiClient.dog.getDogsByFilters(breedId, categoryId)}
-            PETS -> {apiClient.pets.getPetsByFilters(breedId, categoryId)}
+        val response = when (petPreference) {
+            CAT -> apiClient.cat.getCatsByFilters(filter.id, filterType)
+            DOG -> apiClient.dog.getDogsByFilters(filter.id, filterType)
+            PETS -> apiClient.pets.getPetsByFilters(filter, filterType)
         }
 
         response?.let {

@@ -7,4 +7,5 @@ object CoreExtensions {
             .joinToString(" ") { word ->
                 word.replaceFirstChar { it.uppercase() }
             }
+
 }

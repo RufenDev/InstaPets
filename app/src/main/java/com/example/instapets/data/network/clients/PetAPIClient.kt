@@ -4,20 +4,24 @@ import android.util.Log
 import com.example.instapets.data.network.NetworkModule.CAT_SERVICE_NAME
 import com.example.instapets.data.network.NetworkModule.DOG_SERVICE_NAME
 import com.example.instapets.data.network.APIService
+import com.example.instapets.data.network.APIService.Companion.DEFAULT_PET_COUNT
+import com.example.instapets.data.network.APIService.Companion.SEARCH_PET_COUNT
 import com.example.instapets.data.network.response.BreedItem.BreedsResponse
 import com.example.instapets.data.network.response.PetItem.PetResponse
+import com.example.instapets.domain.BreedOrCategoryFilter
+import com.example.instapets.domain.model.filter.FilterModel
 import javax.inject.Inject
 import javax.inject.Named
 
 class PetAPIClient @Inject constructor(
     @Named(CAT_SERVICE_NAME) private val cat: APIService,
-    @Named(DOG_SERVICE_NAME) private val dog: APIService
+    @Named(DOG_SERVICE_NAME) private val dog: APIService,
 ) {
 
-    suspend fun getPetImagesFromAPI(): PetResponse? {
+    suspend fun getPetImagesFromAPI(count:Int = DEFAULT_PET_COUNT): PetResponse? {
         runCatching {
-            val catsCount = (1..PET_COUNT_DEFAULT_VALUE).random()
-            val dogsCount = catsCount - PET_COUNT_DEFAULT_VALUE
+            val catsCount = (3..count).random()
+            val dogsCount = count - catsCount
 
             val catsResponse: PetResponse? = cat.getPetImages(catsCount).body()
             val dogsResponse: PetResponse? = dog.getPetImages(dogsCount).body()
@@ -40,7 +44,6 @@ class PetAPIClient @Inject constructor(
 
     suspend fun getPetBreedsFromAPI(): BreedsResponse? {
         runCatching {
-
             val catsResponse = cat.getPetBreeds().body()
             val dogsResponse = dog.getPetBreeds().body()
 
@@ -60,27 +63,28 @@ class PetAPIClient @Inject constructor(
         return null
     }
 
-    suspend fun getPetsByFilters(breedId: String, categoryId: String): PetResponse? {
+    suspend fun getPetsByFilters(
+        filter: FilterModel,
+        filterType: BreedOrCategoryFilter,
+    ): PetResponse? {
+
         kotlin.runCatching {
-            val catsResponse = cat.getPetByFilter(breedId, categoryId).body()
-            val dogsResponse = dog.getPetByFilter(breedId, categoryId).body()
+            val breedId = if (filterType) filter.id else ""
+            val categoryId = if (!filterType) filter.id else ""
 
-            val combinationResponse = PetResponse()
+            if(breedId.isBlank() && categoryId.isBlank()){
+                getPetImagesFromAPI(SEARCH_PET_COUNT)
 
-            if(catsResponse != null && dogsResponse != null){
-                combinationResponse.addAll(catsResponse)
-                combinationResponse.addAll(dogsResponse)
+            } else if(filter.petType){
+                cat.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId).body()
+
+            } else {
+                dog.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId).body()
             }
-
-            combinationResponse
         }
             .onSuccess { pets -> return pets }
             .onFailure { Log.e("ññ", "PetsByFilterAPI ERROR MSJ: ${it.message}") }
 
         return null
-    }
-
-    companion object{
-        const val PET_COUNT_DEFAULT_VALUE = 10
     }
 }

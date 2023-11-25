@@ -25,7 +25,13 @@ interface APIService {
 
     @GET("images/search")
     suspend fun getPetByFilter(
+        @Query("limit") petCount: Int,
         @Query("breed_ids") breedId: String,
-        @Query("category_ids") categoryId: String
+        @Query("category_ids") categoryId: String,
     ) : Response<PetResponse>
+
+    companion object{
+        const val DEFAULT_PET_COUNT = 10
+        const val SEARCH_PET_COUNT = 18
+    }
 }
