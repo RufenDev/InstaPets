@@ -7,8 +7,11 @@ import com.example.instapets.data.network.APIService.Companion.DEFAULT_PET_COUNT
 import com.example.instapets.data.network.APIService.Companion.SEARCH_PET_COUNT
 import com.example.instapets.data.network.response.BreedItem
 import com.example.instapets.data.network.response.PetItem
-import com.example.instapets.data.network.response.PetItem.PetResponse
 import com.example.instapets.domain.BreedOrCategoryFilter
+import com.example.instapets.domain.model.home.HomePetModel
+import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
+import com.example.instapets.domain.model.search.SearchPetModel
+import com.example.instapets.domain.model.search.SearchPetModel.Companion.toSearchModel
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -16,10 +19,10 @@ class DogAPIClient @Inject constructor(
     @Named(DOG_SERVICE_NAME) private val dog: APIService,
 ) {
 
-    suspend fun getDogImagesFromAPI(): PetResponse? {
+    suspend fun getDogImagesFromAPI(): List<HomePetModel>? {
         runCatching { dog.getPetImages(DEFAULT_PET_COUNT) }
-            .onSuccess { return it.body() ?: PetResponse() }
             .onFailure { Log.e("ññ", "DogImagesAPI ERROR MSJ: ${it.message}") }
+            .onSuccess { it.body()?.toHomeModel(false) ?: emptyList() }
         return null
     }
 
@@ -40,15 +43,15 @@ class DogAPIClient @Inject constructor(
     suspend fun getDogsByFilters(
         filterId: String,
         filterType: BreedOrCategoryFilter,
-    ): PetResponse? {
+    ): List<SearchPetModel>? {
 
         runCatching {
             val breedId = if (filterType) filterId else ""
             val categoryId = if (!filterType) filterId else ""
             dog.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId)
         }
-            .onSuccess { return it.body() ?: PetResponse() }
             .onFailure { Log.e("ññ", "DogByFilterAPI ERROR MSJ: ${it.message}") }
+            .onSuccess { it.body()?.toSearchModel(false) ?: emptyList()  }
         return null
     }
 

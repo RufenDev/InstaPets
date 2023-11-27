@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private companion object {
-        val loadingBar = HomePetModel(LOADING_BAR_ID, "", emptyList(), emptyList())
+        val loadingBar = HomePetModel(LOADING_BAR_ID, "", emptyList(), emptyList(), false)
     }
 
 }

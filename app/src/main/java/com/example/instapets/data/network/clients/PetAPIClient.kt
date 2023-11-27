@@ -10,6 +10,10 @@ import com.example.instapets.data.network.response.BreedItem.BreedsResponse
 import com.example.instapets.data.network.response.PetItem.PetResponse
 import com.example.instapets.domain.BreedOrCategoryFilter
 import com.example.instapets.domain.model.filter.FilterModel
+import com.example.instapets.domain.model.home.HomePetModel
+import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
+import com.example.instapets.domain.model.search.SearchPetModel
+import com.example.instapets.domain.model.search.SearchPetModel.Companion.toSearchModel
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,7 +22,7 @@ class PetAPIClient @Inject constructor(
     @Named(DOG_SERVICE_NAME) private val dog: APIService,
 ) {
 
-    suspend fun getPetImagesFromAPI(count:Int = DEFAULT_PET_COUNT): PetResponse? {
+    suspend fun getPetImagesFromAPI(count:Int = DEFAULT_PET_COUNT): List<HomePetModel>? {
         runCatching {
             val catsCount = (3..count).random()
             val dogsCount = count - catsCount
@@ -26,11 +30,11 @@ class PetAPIClient @Inject constructor(
             val catsResponse: PetResponse? = cat.getPetImages(catsCount).body()
             val dogsResponse: PetResponse? = dog.getPetImages(dogsCount).body()
 
-            val combinationResponse = PetResponse()
+            val combinationResponse = mutableListOf<HomePetModel>()
 
             if (catsResponse != null && dogsResponse != null) {
-                combinationResponse.addAll(catsResponse)
-                combinationResponse.addAll(dogsResponse)
+                combinationResponse.addAll(catsResponse.toHomeModel(true))
+                combinationResponse.addAll(dogsResponse.toHomeModel(false))
             }
 
             combinationResponse
@@ -66,24 +70,26 @@ class PetAPIClient @Inject constructor(
     suspend fun getPetsByFilters(
         filter: FilterModel,
         filterType: BreedOrCategoryFilter,
-    ): PetResponse? {
+    ): List<SearchPetModel>? {
 
         kotlin.runCatching {
             val breedId = if (filterType) filter.id else ""
             val categoryId = if (!filterType) filter.id else ""
 
             if(breedId.isBlank() && categoryId.isBlank()){
-                getPetImagesFromAPI(SEARCH_PET_COUNT)
+                getPetImagesFromAPI(SEARCH_PET_COUNT)?.toSearchModel() ?: emptyList()
 
             } else if(filter.petType){
-                cat.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId).body()
+                cat.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId)
+                    .body()?.toSearchModel(true) ?: emptyList()
 
             } else {
-                dog.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId).body()
+                dog.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId)
+                    .body()?.toSearchModel(false) ?: emptyList()
             }
         }
-            .onSuccess { pets -> return pets }
             .onFailure { Log.e("ññ", "PetsByFilterAPI ERROR MSJ: ${it.message}") }
+            .onSuccess { pets -> return pets }
 
         return null
     }

@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
             popup.setOnMenuItemClickListener { menu ->
                 when (menu.itemId) {
                     homeMenuSeeDescription -> {
-                        navigateToPetDescription(pet.homePet.id)
+                        navigateToPetDescription(pet.homePet.id, pet.homePet.type)
                         true
                     }
 

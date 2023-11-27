@@ -56,7 +56,7 @@ class HomeViewHolder(view: View) : ViewHolder(view) {
         object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 Toast.makeText(itemView.context, "Single", Toast.LENGTH_SHORT).show()
-                onHomeAction(SeePetDescription(pet.id))
+                onHomeAction(SeePetDescription(pet.id, pet.type))
                 return false
             }
             override fun onDoubleTap(e: MotionEvent): Boolean {

@@ -5,7 +5,6 @@ import com.example.instapets.core.PetTypes.CAT
 import com.example.instapets.core.PetTypes.DOG
 import com.example.instapets.core.PetTypes.PETS
 import com.example.instapets.data.network.APIClient
-import com.example.instapets.data.network.response.PetItem
 import com.example.instapets.domain.Repository
 import com.example.instapets.domain.BreedOrCategoryFilter
 import com.example.instapets.domain.model.description.DescriptionPetModel
@@ -14,22 +13,20 @@ import com.example.instapets.domain.model.filter.FilterModel
 import com.example.instapets.domain.model.filter.FilterModel.Companion.toFilterModel
 import com.example.instapets.domain.model.filter.IsACat
 import com.example.instapets.domain.model.home.HomePetModel
-import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
 import com.example.instapets.domain.model.search.SearchPetModel
-import com.example.instapets.domain.model.search.SearchPetModel.Companion.toSearchModel
 import javax.inject.Inject
 
 class RepositoryImplementation @Inject constructor(private val apiClient: APIClient) : Repository {
 
     override suspend fun getPetsImages(type: PetTypes): List<HomePetModel> {
-        val response: PetItem.PetResponse? = when (type) {
+        val response = when (type) {
             CAT -> apiClient.cat.getCatImagesFromAPI()
             DOG -> apiClient.dog.getDogImagesFromAPI()
             PETS -> apiClient.pets.getPetImagesFromAPI()
         }
 
         response?.let {
-            return it.toHomeModel()
+            return it
 
         } ?: run {
             //Return from DATABASE
@@ -98,7 +95,7 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
 
         response?.let {
-            return it.toSearchModel()
+            return it
 
         } ?: run {
             //return from database

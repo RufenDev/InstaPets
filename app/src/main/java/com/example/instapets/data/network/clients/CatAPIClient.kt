@@ -8,8 +8,11 @@ import com.example.instapets.data.network.APIService.Companion.SEARCH_PET_COUNT
 import com.example.instapets.data.network.response.BreedItem.BreedsResponse
 import com.example.instapets.data.network.response.CategoryItem.CategoriesResponse
 import com.example.instapets.data.network.response.PetItem
-import com.example.instapets.data.network.response.PetItem.PetResponse
 import com.example.instapets.domain.BreedOrCategoryFilter
+import com.example.instapets.domain.model.home.HomePetModel
+import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
+import com.example.instapets.domain.model.search.SearchPetModel
+import com.example.instapets.domain.model.search.SearchPetModel.Companion.toSearchModel
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -17,10 +20,10 @@ class CatAPIClient @Inject constructor(
     @Named(CAT_SERVICE_NAME) private val cat: APIService,
 ) {
 
-    suspend fun getCatImagesFromAPI(): PetResponse? {
+    suspend fun getCatImagesFromAPI(): List<HomePetModel>? {
         runCatching { cat.getPetImages(DEFAULT_PET_COUNT) }
-            .onSuccess { return it.body() ?: PetResponse() }
             .onFailure { Log.e("ññ", "CatImagesAPI ERROR MSJ: ${it.message}") }
+            .onSuccess { return it.body()?.toHomeModel(true) ?: emptyList() }
         return null
     }
 
@@ -48,14 +51,14 @@ class CatAPIClient @Inject constructor(
     suspend fun getCatsByFilters(
         filterId: String,
         filterType: BreedOrCategoryFilter,
-    ): PetResponse? {
+    ): List<SearchPetModel>? {
 
         runCatching {
             val breedId = if (filterType) filterId else ""
             val categoryId = if (!filterType) filterId else ""
             cat.getPetByFilter(SEARCH_PET_COUNT, breedId, categoryId)
         }
-            .onSuccess { return it.body() ?: PetResponse() }
+            .onSuccess { return it.body()?.toSearchModel(true) ?: emptyList() }
             .onFailure { Log.e("ññ", "CatByFilterAPI ERROR MSJ: ${it.message}") }
         return null
     }
