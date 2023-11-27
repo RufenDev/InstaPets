@@ -1,6 +1,7 @@
 package com.example.instapets.ui.home.adapter
 
 import androidx.appcompat.widget.AppCompatImageButton
+import com.example.instapets.domain.model.filter.IsACat
 import com.example.instapets.domain.model.home.HomePetModel
 
 sealed interface HomeAction {
@@ -11,5 +12,5 @@ sealed interface HomeAction {
     data class OnMoreOptions(val homePet: HomePetModel, val button: AppCompatImageButton) :
         HomeAction
 
-    data class SeePetDescription(val petId: String) : HomeAction
+    data class SeePetDescription(val petId: String, val type:IsACat) : HomeAction
 }

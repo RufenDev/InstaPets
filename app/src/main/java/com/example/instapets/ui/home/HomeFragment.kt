@@ -1,5 +1,6 @@
 package com.example.instapets.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,12 +17,14 @@ import com.example.instapets.R.id.homeMenuSeeDescription
 import com.example.instapets.R.id.homeMenuShare
 import com.example.instapets.R.menu.home_pet_menu
 import com.example.instapets.databinding.FragmentHomeBinding
+import com.example.instapets.domain.model.filter.IsACat
 import com.example.instapets.domain.model.home.HomePetModel
 import com.example.instapets.ui.core.Extensions.lastVisibleItem
 import com.example.instapets.ui.core.Extensions.visibility
 import com.example.instapets.ui.home.adapter.HomeAction
 import com.example.instapets.ui.home.adapter.HomeAdapter
 import com.example.instapets.ui.core.states.States.*
+import com.example.instapets.ui.description.DescriptionActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -101,12 +104,15 @@ class HomeFragment : Fragment() {
             is HomeAction.OnPetLiked -> homeViewModel.petLiked(action.homePet)
             is HomeAction.OnPetSaved -> homeViewModel.petSaved(action.homePet)
             is HomeAction.OnMoreOptions -> onMoreOption(action)
-            is HomeAction.SeePetDescription -> navigateToPetDescription(action.petId)
+            is HomeAction.SeePetDescription -> navigateToPetDescription(action.petId, action.type)
         }
     }
 
-    private fun navigateToPetDescription(petId: String) {
-
+    private fun navigateToPetDescription(petId: String, type:IsACat) {
+        val intent = Intent(requireContext(), DescriptionActivity::class.java)
+        intent.putExtra(DescriptionActivity.PET_DESCRIPTION_ID, petId)
+        intent.putExtra(DescriptionActivity.PET_DESCRIPTION_ID, type)
+        startActivity(intent)
     }
 
     private fun onMoreOption(pet: HomeAction.OnMoreOptions) {

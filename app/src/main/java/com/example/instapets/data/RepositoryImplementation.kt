@@ -12,6 +12,7 @@ import com.example.instapets.domain.model.description.DescriptionPetModel
 import com.example.instapets.domain.model.description.DescriptionPetModel.Companion.toDescriptionModel
 import com.example.instapets.domain.model.filter.FilterModel
 import com.example.instapets.domain.model.filter.FilterModel.Companion.toFilterModel
+import com.example.instapets.domain.model.filter.IsACat
 import com.example.instapets.domain.model.home.HomePetModel
 import com.example.instapets.domain.model.home.HomePetModel.Companion.toHomeModel
 import com.example.instapets.domain.model.search.SearchPetModel
@@ -36,12 +37,10 @@ class RepositoryImplementation @Inject constructor(private val apiClient: APICli
         }
     }
 
-    override suspend fun getPetDescription(id: String, type: PetTypes): DescriptionPetModel {
-        val response = when (type) {
-            CAT -> apiClient.cat.getCatDescriptionFromAPI(id)
-            DOG -> apiClient.dog.getDogDescriptionFromAPI(id)
-            else -> null
-        }
+    override suspend fun getPetDescription(id: String, type: IsACat): DescriptionPetModel {
+        val response =
+            if (type) apiClient.cat.getCatDescriptionFromAPI(id)
+            else apiClient.dog.getDogDescriptionFromAPI(id)
 
         response?.let {
             return it.toDescriptionModel()

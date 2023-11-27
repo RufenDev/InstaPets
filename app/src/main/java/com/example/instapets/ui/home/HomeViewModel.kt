@@ -1,5 +1,6 @@
 package com.example.instapets.ui.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.instapets.core.PetTypes
@@ -38,6 +39,7 @@ class HomeViewModel @Inject constructor(
             launch {
                 configurations.petFlow.collect {
                     petPreference = it
+                    Log.i("ññ", "HomeViewModel PetCollect -> ${it.name}")
                     refreshingHome()
                 }
             }

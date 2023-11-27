@@ -1,5 +1,6 @@
 package com.example.instapets.ui.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.instapets.core.PetTypes
@@ -10,7 +11,6 @@ import com.example.instapets.domain.usecase.GetPetByFilter
 import com.example.instapets.ui.core.preferences.ConfigurationPreferences
 import com.example.instapets.ui.core.states.States
 import com.example.instapets.ui.core.states.States.*
-import com.example.instapets.ui.core.views.LoadingBarViewHolder.Companion.LOADING_BAR_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +44,10 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             launch {
                 configurations.petFlow.collect {
+                    Log.i("ññ", "SearchViewModel PetCollect -> ${it.name}")
                     _petPreference = it
+                    filter = FilterModel(id = "", petType = true)
+                    filterType = true
                     refreshSearch()
                 }
             }
@@ -97,9 +100,4 @@ class SearchViewModel @Inject constructor(
         }
         isRefreshing = false
     }
-
-    private companion object {
-        val loadingBar = SearchPetModel(LOADING_BAR_ID, "")
-    }
-
 }

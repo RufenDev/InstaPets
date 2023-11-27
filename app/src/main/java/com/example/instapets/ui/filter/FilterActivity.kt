@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instapets.R
+import com.example.instapets.core.CoreExtensions.toPetType
 import com.example.instapets.core.PetTypes
 import com.example.instapets.core.PetTypes.CAT
 import com.example.instapets.databinding.ActivityFilterBinding
@@ -123,8 +124,6 @@ class FilterActivity : AppCompatActivity() {
     }
 
     private fun getPet() =
-        PetTypes.values().first {
-            it.value == (intent?.extras?.getInt(FILTER_PET_PREFERENCE_KEY, CAT.value) ?: CAT.value)
-        }
+        (intent?.extras?.getInt(FILTER_PET_PREFERENCE_KEY, CAT.value) ?: CAT.value).toPetType()
 
 }

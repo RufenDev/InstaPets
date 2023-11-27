@@ -8,4 +8,6 @@ object CoreExtensions {
                 word.replaceFirstChar { it.uppercase() }
             }
 
+    fun Int.toPetType() = PetTypes.values().firstOrNull { it.value == this } ?: PetTypes.CAT
+
 }

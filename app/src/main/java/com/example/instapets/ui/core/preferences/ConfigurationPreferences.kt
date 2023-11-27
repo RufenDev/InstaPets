@@ -1,6 +1,7 @@
 package com.example.instapets.ui.core.preferences
 
 import android.content.SharedPreferences
+import com.example.instapets.core.CoreExtensions.toPetType
 import com.example.instapets.core.PetTypes
 import com.example.instapets.core.PetTypes.*
 import kotlinx.coroutines.channels.awaitClose
@@ -25,18 +26,14 @@ class ConfigurationPreferences @Inject constructor(
         sharedPreferences.edit().putInt(PET_PREFERENCE_KEY, pet.value).apply()
     }
 
-    fun loadPet() = PetTypes.values().first {
-        it.value == sharedPreferences.getInt(PET_PREFERENCE_KEY, CAT.value)
-    }
+    fun loadPet() = sharedPreferences.getInt(PET_PREFERENCE_KEY, CAT.value).toPetType()
 
 
     val petFlow: Flow<PetTypes>
         get() = callbackFlow {
             val listener = OnSharedPreferenceChangeListener1 { preference, key ->
                 launch {
-                    val petSaved = PetTypes.values().first {
-                        it.value == preference.getInt(key, CAT.value)
-                    }
+                    val petSaved = preference.getInt(key, CAT.value).toPetType()
                     send(petSaved)
                 }
             }
